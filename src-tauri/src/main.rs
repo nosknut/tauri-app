@@ -4,11 +4,26 @@
 )]
 
 use std::{
-    fs::{create_dir_all, remove_dir_all, File},
-    io::{BufReader, Read, Write},
+    fs::{self, create_dir_all, remove_dir_all, File, OpenOptions},
+    io::Write,
 };
 
+use tauri::api::path::data_dir;
+
+fn create_app_dir() -> std::io::Result<()> {
+    // Must also be changed in main.rs and tauri.conf.json
+    let application_name = "Tauri App";
+    create_dir_all(
+        data_dir()
+            .expect("Data dir path does not exist")
+            .join(application_name),
+    )?;
+    Ok(())
+}
+
 fn main() {
+    create_app_dir().expect("Could not create app dir");
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             custom_read_file_function,
@@ -71,23 +86,17 @@ fn main_action() -> std::io::Result<()> {
 
 #[tauri::command]
 fn custom_read_file_function(file_path: &str) -> Result<String, String> {
-    let file = match File::create(file_path) {
-        Ok(file) => file,
-        Err(err) => {
-            return Err(err.to_string());
-        }
+    let contents = match fs::read_to_string(file_path) {
+        Ok(text) => text,
+        Err(err) => return Err(err.to_string()),
     };
-    let mut buf_reader = BufReader::new(file);
-    let mut contents = String::new();
-    match buf_reader.read_to_string(&mut contents) {
-        Ok(_) => Ok(contents),
-        Err(err) => Err(err.to_string()),
-    }
+    Ok(contents)
 }
 
 #[tauri::command]
 fn custom_write_file_function(file_path: &str, content: &str) -> Result<(), String> {
-    let mut file = match File::create(file_path) {
+    // OpenOptions opens a file in write mode when calling write(true).
+    let mut file = match OpenOptions::new().write(true).open(file_path) {
         Ok(file) => file,
         Err(err) => {
             return Err(err.to_string());
