@@ -4,11 +4,8 @@
 )]
 
 use std::{
-    collections::LinkedList,
-    fmt::format,
     fs::{create_dir_all, remove_dir_all, File},
     io::{BufReader, Read, Write},
-    str::Split,
 };
 
 fn main() {
@@ -35,7 +32,7 @@ fn mainAction() -> std::io::Result<()> {
     create_dir_all("./KSF");
 
     for (i, line) in lines.enumerate() {
-        if (i % 20 == 0 && i != 0) {
+        if i % 20 == 0 && i != 0 {
             tabn += 1;
             //writeTab(thing, tabn);
             let name = format!("Tab{}", tabn.to_string());
@@ -75,7 +72,7 @@ fn read_file(file: File) -> String {
 }
 
 fn replace(base: String, tabs: [&str; 20], i: usize) -> String {
-    if (i >= 20) {
+    if i >= 20 {
         return base;
     }
 
