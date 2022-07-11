@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, useTheme } from '@mui/material';
 import { invoke } from '@tauri-apps/api';
-import { writeFile } from '@tauri-apps/api/fs';
+import { readTextFile, writeFile } from '@tauri-apps/api/fs';
 
 function App() {
   const theme = useTheme()
@@ -26,6 +26,17 @@ function App() {
                 >
                   Write File
                 </Button>
+              </Grid>              <Grid item sm={6} xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  color='primary'
+                  onClick={() => {
+                    readTextFile('./test.txt').then(alert).catch(alert)
+                  }}
+                >
+                  Read File
+                </Button>
               </Grid>
               <Grid item sm={6} xs={12}>
                 <Button
@@ -33,7 +44,19 @@ function App() {
                   variant='contained'
                   color='primary'
                   onClick={async () => {
-                    await invoke('custom_read_file_function', { filePath: './test.txt' })
+                    await invoke('custom_write_file_function', { filePath: './test.txt', content: 'Hello World Invoked' })
+                  }}
+                >
+                  Write File with Invoke
+                </Button>
+              </Grid>
+              <Grid item sm={6} xs={12}>
+                <Button
+                  fullWidth
+                  variant='contained'
+                  color='primary'
+                  onClick={() => {
+                    invoke('custom_read_file_function', { filePath: './test.txt' }).then(alert).catch(alert)
                   }}
                 >
                   Read File with Invoke
