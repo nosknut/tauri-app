@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Grid, Toolbar, Typography, useTheme } from '@mui/material';
+import { AppBar, Button, Container, Grid, Toolbar, Typography, useTheme } from '@mui/material';
 import { invoke } from '@tauri-apps/api';
 import { readTextFile, writeFile } from '@tauri-apps/api/fs';
 
@@ -21,12 +21,13 @@ function App() {
                   variant='contained'
                   color='primary'
                   onClick={async () => {
-                    await writeFile('./test.txt', 'Hello World')
+                    writeFile('./test.txt', 'Hello World').catch(alert)
                   }}
                 >
                   Write File
                 </Button>
-              </Grid>              <Grid item sm={6} xs={12}>
+              </Grid>
+              <Grid item sm={6} xs={12}>
                 <Button
                   fullWidth
                   variant='contained'
@@ -44,7 +45,7 @@ function App() {
                   variant='contained'
                   color='primary'
                   onClick={async () => {
-                    await invoke('custom_write_file_function', { filePath: './test.txt', content: 'Hello World Invoked' })
+                    invoke('custom_write_file_function', { filePath: './test.txt', content: 'Hello World Invoked' }).catch(alert)
                   }}
                 >
                   Write File with Invoke
