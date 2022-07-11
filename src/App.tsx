@@ -21,7 +21,7 @@ function App() {
                   variant='contained'
                   color='primary'
                   onClick={async () => {
-                    await writeFile('test.txt', 'Hello World')
+                    await writeFile('./test.txt', 'Hello World')
                   }}
                 >
                   Write File
@@ -33,10 +33,10 @@ function App() {
                   variant='contained'
                   color='primary'
                   onClick={async () => {
-                    await invoke('custom_read_file_function', { file: 'test.txt' })
+                    await invoke('custom_read_file_function', { filePath: './test.txt' })
                   }}
                 >
-                  Write File with invoke
+                  Read File with Invoke
                 </Button>
               </Grid>
             </Grid>
