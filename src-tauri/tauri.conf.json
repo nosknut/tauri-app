@@ -14,13 +14,9 @@
     "allowlist": {
       "all": true,
       "fs": {
-        "all": true,
         "scope": [
           "$DATA/Tauri App/*"
         ]
-      },
-      "path": {
-        "all": true
       }
     },
     "bundle": {
