@@ -10,6 +10,7 @@ use std::{
 
 fn main() {
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![custom_read_file_function, replace])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
